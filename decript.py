@@ -2,10 +2,8 @@
 #Diana de Leon 18607
 #Camila Gonzalez 18398
 #Maria Ines Vasquez 18250
-#Christopher Barrios 18207
-#Jose Garavito 18071
 
-#Laboratorio 2
+
 #BLOCK CIPHERS
 #se esta trabajando con un archivo .TXT
 
@@ -44,7 +42,7 @@ iv = derived[0:IV_SIZE]
 key = derived[IV_SIZE:]
 
 #aqui se desencripta el texto
-cleartext = AES.new(key, AES.MODE_CFB, iv).decrypt(encrypted[SALT_SIZE:])
+cleartext = AES.new(key, AES.MODE_GCM, iv).decrypt(encrypted[SALT_SIZE:])
 #Escribir el archivo con el texto desencriptado
 f = open ('text-decripted.txt','wb')
 f.write(cleartext)

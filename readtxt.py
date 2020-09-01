@@ -2,10 +2,8 @@
 #Diana de Leon 18607
 #Camila Gonzalez 18398
 #Maria Ines Vasquez 18250
-#Christopher Barrios 18207
-#Jose Garavito 18071
 
-#Laboratorio 2
+
 #BLOCK CIPHERS
 #se esta trabajando con un archivo .TXT
 
@@ -33,6 +31,7 @@ archivo.close()
 password = input('Ingrese su password segura')
 #convertir texto de password a bytes
 password= str.encode(password)
+print(password)
 #se genera una cadena de bytes aleatorios (del tamano del salsize)
 salt = os.urandom(SALT_SIZE)
 #se genera el vector de inicializacion y la clave del cifrado
@@ -44,8 +43,12 @@ iv = derived[0:IV_SIZE]
 key = derived[IV_SIZE:]
 
 #aqui se encripta el texto
-encrypted = salt + AES.new(key, AES.MODE_CFB, iv).encrypt(cleartext)
+encrypted, authTag =  AES.new(key, AES.MODE_GCM, iv).encrypt_and_digest(cleartext)
 # Escribir el archivo con el texto encriptado
+
+print(authTag)#trustDataCheck PREGUNTAR A SURIANO
+
+encrypted=salt+encrypted
 cript = open ('cript.txt','wb')
 cript.write(encrypted)
 cript.close()
