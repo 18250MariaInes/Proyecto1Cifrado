@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from configparser import ConfigParser
  
-def config(archivo='main_db.ini', seccion='postgresql'):
+def configmain(archivo='main_db.ini', seccion='postgresql'):
     # Parsear el archivo
     parser = ConfigParser()
     parser.read(archivo)
