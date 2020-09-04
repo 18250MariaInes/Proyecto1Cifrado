@@ -15,7 +15,7 @@ SALT_SIZE = 16  # Tamano recomendado para esta encripccion
 
 
 
-def signup(username, email, password):#log
+def signup(username, email, password):#sign up
     conexion = None
     try:
         # Lectura de los parámetros de conexion
@@ -303,16 +303,13 @@ def load(password, representation, trustedDataCheck=None):#comparar con el hash 
         print("integro")
     else:
         print("lo han hackeado :(")
-   
-    
 
 def dump(getAll, password):
     password=str.encode(password)
     dicc=str.encode(str(getAll))
     h = HMAC.new(password, digestmod=SHA256)
     h.update(dicc)
-    print(h.hexdigest())
-    
+    print(h.hexdigest())  
     
 def comprobar(email,password):
     conexion = None
@@ -407,7 +404,6 @@ def remove(name):
             conexion.close()
             print('Conexión finalizada.')
 
-
 def conectar():
     """ Conexión al servidor de pases de datos PostgreSQL """
     conexion = None
@@ -438,8 +434,6 @@ def conectar():
         if conexion is not None:
             conexion.close()
             print('Conexión finalizada.')
-
-
 
 if __name__ == '__main__':
     """set("facebook", "123456",3)
