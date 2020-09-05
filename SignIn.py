@@ -6,12 +6,23 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QIcon
-from logIn import *
 import psycopg2
 from config import config
+from configmain import configmain
+import hashlib
+import math
+import os
+import hashlib
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QIcon
+#from logIn import *
+
+from Crypto.Hash import HMAC, SHA256
+from Crypto.Cipher import AES
+
+IV_SIZE = 16    # Largo de la cadena de 128 bits, estandarizada para el algoritmo AES
+KEY_SIZE = 32   # Largo de la llave de 256 bit modificado para el algoritmo AES-256 (32*8=256)
+SALT_SIZE = 16  # Tamano recomendado para esta encripccion
 
 class Ui_LogIn(object):
     def setupUi(self, LogIn):
@@ -64,7 +75,7 @@ class Ui_LogIn(object):
         self.sigInButton.setStyleSheet("background-color: rgb(206, 206, 206);\n"
 "color: rgb(72, 72, 72);")
         self.sigInButton.setObjectName("sigInButton")
-        #self.sigInButton.clicked.connect(self.validateInfo)
+        self.sigInButton.clicked.connect(self.sign_in_func)
         self.retranslateUi(LogIn)
         #self.validateInfo(LogIn)
         QtCore.QMetaObject.connectSlotsByName(LogIn)
@@ -77,6 +88,63 @@ class Ui_LogIn(object):
         self.passwordLabel.setText(_translate("LogIn", "Contraseña:"))
         self.sigInButton.setText(_translate("LogIn", "Sign In"))
         self.sigInButton.clicked.connect(lambda:self.validateInfo(LogIn))
+
+    def sign_in_func(self):
+        conexion = None
+        try:
+            # Lectura de los parámetros de conexion
+            params = configmain()
+
+            #print(params)
+            # Conexion al servidor de PostgreSQL
+            print('Conectando a la base de datos PostgreSQL...')
+            conexion = psycopg2.connect(**params)
+            # creación del cursor
+            cur = conexion.cursor()
+            # Ejecución la consulta para obtener la conexión
+            print('La version de PostgreSQL es la:')
+            cur.execute('SELECT version()')
+
+            # Se obtienen los resultados
+            db_version = cur.fetchone()
+            # Se muestra la versión por pantalla
+            print(db_version)
+            master=self.passwordInput
+            password= str.encode(master)
+            #print(password)
+            #se genera una cadena de bytes aleatorios (del tamano del salsize)
+            
+            salt = os.urandom(SALT_SIZE)
+            derived = hashlib.pbkdf2_hmac('sha256', password, salt, 100000,
+                                    dklen=IV_SIZE + KEY_SIZE)
+            
+            #vector inicial con tamano 16
+            iv = derived[0:IV_SIZE]
+            #llave con tamano 32
+            key = derived[IV_SIZE:]
+            
+
+            hash_user=str.encode(self.usernameInput)
+
+            #aqui se encripta el texto
+            encrypted, authTag =  AES.new(key, AES.MODE_GCM, iv).encrypt_and_digest(hash_user)
+            # Escribir el archivo con el texto encriptado
+            
+            #print(authTag)#trustDataCheck PREGUNTAR A SURIANO
+
+            encrypted=salt+encrypted ##sha de diccionario de todos los datos
+            encrypted=encrypted 
+
+            cur.execute("INSERT INTO users (username, email, hash_user)VALUES (%s,%s, %s)", (self.usernameInput, self.emailInput, encrypted))
+            conexion.commit()
+            cur.close()
+            
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conexion is not None:
+                conexion.close()
+                print('Conexión finalizada.')
 
     def validateInfo(self, LogIn):
         #Aqui iria verificar el user y password en BD
