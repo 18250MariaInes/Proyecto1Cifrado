@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Buscador</class>
- <widget class="QWidget" name="Buscador">
+ <class>Eliminar</class>
+ <widget class="QWidget" name="Eliminar">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -16,52 +16,12 @@
   <property name="styleSheet">
    <string notr="true">background-color: rgb(0, 0, 0);</string>
   </property>
-  <widget class="QLabel" name="aplicacion">
+  <widget class="QPushButton" name="removeButton">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>100</y>
-     <width>101</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
-   </property>
-   <property name="text">
-    <string>Aplicación:</string>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="aplicacionInput">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>100</y>
-     <width>181</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="addButton">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>230</y>
-     <width>101</width>
+     <x>160</x>
+     <y>260</y>
+     <width>91</width>
      <height>41</height>
     </rect>
    </property>
@@ -78,15 +38,15 @@ color: rgb(72, 72, 72);
 </string>
    </property>
    <property name="text">
-    <string>Agregar</string>
+    <string>Eliminar</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>130</x>
      <y>20</y>
-     <width>111</width>
+     <width>161</width>
      <height>31</height>
     </rect>
    </property>
@@ -101,43 +61,17 @@ color: rgb(72, 72, 72);
     <string notr="true">color: rgb(255, 189, 74);</string>
    </property>
    <property name="text">
-    <string>N U E V O</string>
+    <string>E L I M I N A R</string>
    </property>
   </widget>
-  <widget class="QLabel" name="password">
+  <widget class="QTableWidget" name="appsTable">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>160</y>
-     <width>101</width>
-     <height>31</height>
+     <x>140</x>
+     <y>70</y>
+     <width>131</width>
+     <height>161</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
-   </property>
-   <property name="text">
-    <string>Contraseña:</string>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="passwordInput">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>160</y>
-     <width>181</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255);
