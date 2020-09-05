@@ -136,6 +136,11 @@ class Ui_NewApp(object):
 
             cur.execute("INSERT INTO passwords (userid, site, password)VALUES (%s,%s, %s)", (2, self.aplicacionInput.text(), encrypted))
             conexion.commit()
+            blank=QMessageBox()
+            blank.setIcon(QMessageBox.Information)
+            blank.setWindowTitle("Accion Exitosa")
+            blank.setText("Se ha agregado exitosamente")
+            blank.exec()
             cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)

@@ -146,7 +146,12 @@ class Ui_Eliminar(object):
             name=self.appsTable.item(r,0).text()
             print(name)
             cur.execute("DELETE FROM passwords WHERE passwords.userid = %s AND passwords.site=%s",(2,name))
-            conexion.commit()      
+            conexion.commit() 
+            blank=QMessageBox()
+            blank.setIcon(QMessageBox.Information)
+            blank.setWindowTitle("Accion Exitosa")
+            blank.setText("Se ha eliminado exitosamente")
+            blank.exec()     
             self.conectar()
             cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
