@@ -87,7 +87,7 @@ class Ui_LogIn(object):
         self.emailLabel.setText(_translate("LogIn", "Email:"))
         self.passwordLabel.setText(_translate("LogIn", "Contraseña:"))
         self.sigInButton.setText(_translate("LogIn", "Sign In"))
-        self.sigInButton.clicked.connect(lambda:self.validateInfo(LogIn))
+        #self.sigInButton.clicked.connect(lambda:self.validateInfo(LogIn))
 
     def sign_in_func(self):
         conexion = None
@@ -109,7 +109,7 @@ class Ui_LogIn(object):
             db_version = cur.fetchone()
             # Se muestra la versión por pantalla
             print(db_version)
-            master=self.passwordInput
+            master=self.passwordInput.text()
             password= str.encode(master)
             #print(password)
             #se genera una cadena de bytes aleatorios (del tamano del salsize)
@@ -124,7 +124,7 @@ class Ui_LogIn(object):
             key = derived[IV_SIZE:]
             
 
-            hash_user=str.encode(self.usernameInput)
+            hash_user=str.encode(self.usernameInput.text())
 
             #aqui se encripta el texto
             encrypted, authTag =  AES.new(key, AES.MODE_GCM, iv).encrypt_and_digest(hash_user)
@@ -135,7 +135,7 @@ class Ui_LogIn(object):
             encrypted=salt+encrypted ##sha de diccionario de todos los datos
             encrypted=encrypted 
 
-            cur.execute("INSERT INTO users (username, email, hash_user)VALUES (%s,%s, %s)", (self.usernameInput, self.emailInput, encrypted))
+            cur.execute("INSERT INTO users (username, email, hash_user)VALUES (%s,%s, %s)", (self.usernameInput.text(), self.emailInput.text(), encrypted))
             conexion.commit()
             cur.close()
             
