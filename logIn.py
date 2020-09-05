@@ -7,6 +7,16 @@
 # WARNING! All changes made in this file will be lost!
 
 
+
+from config import config
+from configmain import configmain
+import hashlib
+import math
+import os
+import hashlib
+from Crypto.Hash import HMAC, SHA256
+from Crypto.Cipher import AES
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit
@@ -73,7 +83,7 @@ class Ui_SignInWidget(object):
 "color: rgb(72, 72, 72);")
         self.logIn.setObjectName("logIn")
         #aqui en vez de openActions seria validate para validar la data ingresada
-        self.logIn.clicked.connect(self.openActions)
+        self.logIn.clicked.connect(self.init)
         self.retranslateUi(SignInWidget)
         #self.openActions(SignInWidget)
         QtCore.QMetaObject.connectSlotsByName(SignInWidget)
@@ -86,7 +96,7 @@ class Ui_SignInWidget(object):
         self.signIn.setText(_translate("SignInWidget", "Sign In"))
         self.logIn.setText(_translate("SignInWidget", "Log In"))
         self.signIn.clicked.connect(lambda:self.openSignIn(SignInWidget))
-        self.logIn.clicked.connect(lambda:self.openActions(SignInWidget))
+        #self.logIn.clicked.connect(lambda:self.openActions(SignInWidget))
 
     def openActions(self, SignInWidget):
         #Aqui iria verificar el user y password en BD
@@ -158,6 +168,69 @@ class Ui_SignInWidget(object):
         self.ui.setupUi(self.window)
         #SignInWidget.hide()
         self.window.show()
+
+    def init(self): #log in
+        conexion = None
+        try:
+            # Lectura de los parámetros de conexion
+            params = configmain()
+
+            #print(params)
+            # Conexion al servidor de PostgreSQL
+            print('Conectando a la base de datos PostgreSQL...')
+            conexion = psycopg2.connect(**params)
+            # creación del cursor
+            cur = conexion.cursor()
+            # Ejecución la consulta para obtener la conexión
+            print('La version de PostgreSQL es la:')
+            cur.execute('SELECT version()')
+
+
+            # Se obtienen los resultados
+            db_version = cur.fetchone()
+            # Se muestra la versión por pantalla
+            print(db_version)
+            cur.execute("SELECT hash_user FROM users WHERE email=%s", (self.userInput.text(),))
+            encrypted=cur.fetchall()
+            encrypted=encrypted[0][0]
+            
+            master=self.passwordInput.text()
+            password= str.encode(master)
+            
+
+            salt = encrypted[0:SALT_SIZE]
+            #print(password)
+            #se genera una cadena de bytes aleatorios (del tamano del salsize)
+            
+            derived = hashlib.pbkdf2_hmac('sha256', password, salt, 100000,
+                                      dklen=IV_SIZE + KEY_SIZE)
+            
+            #vector inicial con tamano 16
+            iv = derived[0:IV_SIZE]
+            #llave con tamano 32
+            key = derived[IV_SIZE:]
+            
+            
+
+            #aqui se encripta el texto
+            cleartext =  AES.new(key, AES.MODE_GCM, iv).decrypt(encrypted[SALT_SIZE:])
+            #print(cleartext)
+            # Escribir el archivo con el texto encriptado
+            try:
+                print(cleartext.decode("utf-8") )#trustDataCheck PREGUNTAR A SURIANO
+                return True
+            except:
+
+                print("USTED NO PUEDE ENTRAR CON ESE USUARIO")
+                return False
+
+            cur.close()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conexion is not None:
+                conexion.close()
+                print('Conexión finalizada.')
 
 
 if __name__ == "__main__":
