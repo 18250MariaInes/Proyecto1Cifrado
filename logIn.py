@@ -17,6 +17,7 @@ import hashlib
 from Crypto.Hash import HMAC, SHA256
 from Crypto.Cipher import AES
 
+from keychain import init
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit
@@ -96,7 +97,7 @@ class Ui_SignInWidget(object):
         self.signIn.setText(_translate("SignInWidget", "Sign In"))
         self.logIn.setText(_translate("SignInWidget", "Log In"))
         self.signIn.clicked.connect(lambda:self.openSignIn(SignInWidget))
-        #self.logIn.clicked.connect(lambda:self.openActions(SignInWidget))
+        self.logIn.clicked.connect(lambda:self.openActions(SignInWidget))
 
     def openActions(self, SignInWidget):
         #Aqui iria verificar el user y password en BD
@@ -120,34 +121,38 @@ class Ui_SignInWidget(object):
             db_version = cur.fetchone()
             user=self.userInput.text()
             password=self.passwordInput.text()
+            print("hizo click")
 
             if user != '' and password != '':
-                cur.execute("SELECT contraseña FROM permisos_usuario JOIN customer ON customer.customerid=permisos_usuario.customerid  WHERE customer.email=%s",(user,))
+                """cur.execute("SELECT contraseña FROM permisos_usuario JOIN customer ON customer.customerid=permisos_usuario.customerid  WHERE customer.email=%s",(user,))
                 contrasenaUsuario=cur.fetchall()
                 print(password)
                 cur.execute("SELECT permisos_usuario.permisoid FROM permisos_usuario JOIN customer ON customer.customerid=permisos_usuario.customerid  WHERE customer.email=%s",(user,))
-                idUsuario=cur.fetchall()
-                if (len(contrasenaUsuario)==0):
+                idUsuario=cur.fetchall()"""
+                confirmation=init(user, password)
+                """if (len(contrasenaUsuario)==0):
                     invalid=QMessageBox()
                     invalid.setIcon(QMessageBox.Information)
                     invalid.setWindowTitle("INVALIDO")
                     invalid.setText("Correo no registrado")
+                    invalid.exec()"""
+                
+                if confirmation:
+                    #SignInWidget.hide()
+                    self.window = QtWidgets.QWidget()
+                    #self.id=idUsuario[0][0]
+                    #self.ui = Ui_bienvenidaLabel(self.id)
+                    print ("entró")
+                    self.ui.setupUi(self.window)
+                    #SignInWidget.hide()
+                    #self.window.show()
+                else: 
+                    invalid=QMessageBox()
+                    invalid.setIcon(QMessageBox.Information)
+                    invalid.setWindowTitle("INVALIDO")
+                    invalid.setText("Contraseña incorrectos")
+                    print("No entró")
                     invalid.exec()
-                else:
-                    if contrasenaUsuario[0][0] == password:
-                        #SignInWidget.hide()
-                        self.window = QtWidgets.QWidget()
-                        self.id=idUsuario[0][0]
-                        #self.ui = Ui_bienvenidaLabel(self.id)
-                        self.ui.setupUi(self.window)
-                        SignInWidget.hide()
-                        self.window.show()
-                    else: 
-                        invalid=QMessageBox()
-                        invalid.setIcon(QMessageBox.Information)
-                        invalid.setWindowTitle("INVALIDO")
-                        invalid.setText("Contraseña incorrectos")
-                        invalid.exec()
             else:
                 blank=QMessageBox()
                 blank.setIcon(QMessageBox.Information)
