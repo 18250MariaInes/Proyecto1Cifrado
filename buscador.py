@@ -37,7 +37,7 @@ class Ui_Buscador(object):
         self.aplicacion.setFont(font)
         self.aplicacion.setStyleSheet("color: rgb(255, 255, 255);")
         self.aplicacion.setObjectName("aplicacion")
-        self.aplicacionInput = QtWidgets.QPlainTextEdit(Buscador)
+        self.aplicacionInput = QtWidgets.QLineEdit(Buscador)
         self.aplicacionInput.setGeometry(QtCore.QRect(170, 100, 181, 31))
         self.aplicacionInput.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "color: rgb(0, 0, 0);")
@@ -45,7 +45,7 @@ class Ui_Buscador(object):
         self.consultarButton = QtWidgets.QPushButton(Buscador)
         self.consultarButton.setGeometry(QtCore.QRect(150, 180, 101, 41))
         font = QtGui.QFont()
-        font.setPointSize(10)
+        font.setPointSize(12)
         font.setBold(True)
         font.setWeight(75)
         self.consultarButton.setFont(font)
@@ -70,7 +70,7 @@ class Ui_Buscador(object):
 
     def retranslateUi(self, Buscador):
         _translate = QtCore.QCoreApplication.translate
-        Buscador.setWindowTitle(_translate("Buscador", "Form"))
+        Buscador.setWindowTitle(_translate("Buscador", "Buscador"))
         self.aplicacion.setText(_translate("Buscador", "Aplicación:"))
         self.consultarButton.setText(_translate("Buscador", "Consultar"))
         self.label_2.setText(_translate("Buscador", "B U S C A D O R "))
