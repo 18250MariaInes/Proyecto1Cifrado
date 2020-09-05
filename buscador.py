@@ -121,11 +121,13 @@ class Ui_Buscador(object):
             #aqui se encripta el texto
             cleartext =  AES.new(key, AES.MODE_GCM, iv).decrypt(encrypted[SALT_SIZE:])
             # Escribir el archivo con el texto encriptado
-            
-            print(cleartext.decode("utf-8") )#trustDataCheck PREGUNTAR A SURIANO
-
-            
-
+            mypassword = cleartext.decode("utf-8")
+            print(mypassword)#trustDataCheck PREGUNTAR A SURIANO
+            blank=QMessageBox()
+            blank.setIcon(QMessageBox.Information)
+            blank.setWindowTitle("Password")
+            blank.setText(mypassword)
+            blank.exec()
             
             cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
