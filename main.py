@@ -13,6 +13,7 @@ from removePage import *
 from buscador import *
 from trusted import *
 import sys
+from keychain import *
 
 class Ui_Main(object):
     def __init__(self,id, password):
@@ -90,6 +91,13 @@ class Ui_Main(object):
         self.window.show()
 
     def goExit(self, Form):
+        resultado=dump(getAll(self.id),self.password)
+        print(resultado) 
+        dumpMessage=QMessageBox()
+        dumpMessage.setIcon(QMessageBox.Information)
+        dumpMessage.setWindowTitle("Dump")
+        dumpMessage.setText(resultado)
+        dumpMessage.exec()
         sys.exit()
 
     def retranslateUi(self, Form):

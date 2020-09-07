@@ -310,7 +310,7 @@ def dump(getAll, password):
     dicc=str.encode(str(getAll))
     h = HMAC.new(password, digestmod=SHA256)
     h.update(dicc)
-    print(h.hexdigest())  
+    return (h.hexdigest())  
     
 def comprobar(email,password):
     conexion = None
