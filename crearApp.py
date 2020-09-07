@@ -27,6 +27,10 @@ from config import config
 
 
 class Ui_NewApp(object):
+    def __init__(self,id, password):
+        self.id = id
+        self.passwordUser = password
+
     def setupUi(self, NewApp):
         NewApp.setObjectName("NewApp")
         NewApp.resize(400, 340)
@@ -108,7 +112,7 @@ class Ui_NewApp(object):
             db_version = cur.fetchone()
             # Se muestra la versión por pantalla
             print(db_version)
-            master="camila"
+            master=self.passwordUser
             password= str.encode(master)
             #print(password)
             #se genera una cadena de bytes aleatorios (del tamano del salsize)
@@ -122,7 +126,7 @@ class Ui_NewApp(object):
             #llave con tamano 32
             key = derived[IV_SIZE:]
             
-
+            print(self.passwordInput.text())
             value=str.encode(self.passwordInput.text())
 
             #aqui se encripta el texto
@@ -134,7 +138,7 @@ class Ui_NewApp(object):
             encrypted=salt+encrypted
             encrypted=encrypted 
 
-            cur.execute("INSERT INTO passwords (userid, site, password)VALUES (%s,%s, %s)", (2, self.aplicacionInput.text(), encrypted))
+            cur.execute("INSERT INTO passwords (userid, site, password)VALUES (%s,%s, %s)", (self.id, self.aplicacionInput.text(), encrypted))
             conexion.commit()
             blank=QMessageBox()
             blank.setIcon(QMessageBox.Information)

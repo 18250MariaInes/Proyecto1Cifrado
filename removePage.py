@@ -29,6 +29,10 @@ from config import config
 
 
 class Ui_Eliminar(object):
+    def __init__(self,id, password):
+        self.id = id
+        self.password = password
+
     def setupUi(self, Eliminar):
         Eliminar.setObjectName("Eliminar")
         Eliminar.resize(400, 340)
@@ -79,7 +83,7 @@ class Ui_Eliminar(object):
     def conectar(self):
         #Buscar track
         self.appsTable.setRowCount(0)
-        id=2
+        id=self.id
         #nombreTrack=self.inputTrack.text()
         conexion = None
         try:
@@ -145,7 +149,7 @@ class Ui_Eliminar(object):
             r = self.appsTable.currentRow()
             name=self.appsTable.item(r,0).text()
             print(name)
-            cur.execute("DELETE FROM passwords WHERE passwords.userid = %s AND passwords.site=%s",(2,name))
+            cur.execute("DELETE FROM passwords WHERE passwords.userid = %s AND passwords.site=%s",(self.id,name))
             conexion.commit() 
             blank=QMessageBox()
             blank.setIcon(QMessageBox.Information)

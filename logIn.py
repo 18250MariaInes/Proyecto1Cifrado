@@ -27,6 +27,7 @@ from PyQt5.QtWidgets import QMessageBox
 from SignIn import *
 import psycopg2
 from config import config
+from main import *
 
 
 class Ui_SignInWidget(object):
@@ -103,7 +104,7 @@ class Ui_SignInWidget(object):
         #Aqui iria verificar el user y password en BD
         conexion=None
         try:
-            params = config()
+            params = configmain()
 
             #print(params)
             # Conexion al servidor de PostgreSQL
@@ -138,14 +139,16 @@ class Ui_SignInWidget(object):
                     invalid.exec()"""
                 
                 if confirmation:
-                    #SignInWidget.hide()
-                    self.window = QtWidgets.QWidget()
-                    #self.id=idUsuario[0][0]
-                    #self.ui = Ui_bienvenidaLabel(self.id)
                     print ("entró")
+                    cur.execute("SELECT id FROM users WHERE email=%s", (self.userInput.text(),))
+                    idUsuario=cur.fetchall()
+                    self.window = QtWidgets.QWidget()
+                    self.id=idUsuario[0][0]
+                    print(self.id, password)
+                    self.ui = Ui_Main(self.id, password)
                     self.ui.setupUi(self.window)
-                    #SignInWidget.hide()
-                    #self.window.show()
+                    SignInWidget.hide()
+                    self.window.show()
                 else: 
                     invalid=QMessageBox()
                     invalid.setIcon(QMessageBox.Information)

@@ -26,6 +26,10 @@ import psycopg2
 from config import config
 
 class Ui_Buscador(object):
+    def __init__(self,id, password):
+        self.id = id
+        self.password = password
+
     def setupUi(self, Buscador):
         Buscador.setObjectName("Buscador")
         Buscador.resize(400, 275)
@@ -96,11 +100,11 @@ class Ui_Buscador(object):
             db_version = cur.fetchone()
             # Se muestra la versión por pantalla
             print(db_version)
-            cur.execute("SELECT password FROM passwords WHERE userid=%s and site=%s", (2, self.aplicacionInput.text()))
+            cur.execute("SELECT password FROM passwords WHERE userid=%s and site=%s", (self.id, self.aplicacionInput.text()))
             encrypted=cur.fetchall()
             encrypted=encrypted[0][0]
-            
-            master="camila"
+
+            master=self.password
             password= str.encode(master)
             
 
