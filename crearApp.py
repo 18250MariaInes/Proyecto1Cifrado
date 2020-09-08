@@ -138,7 +138,14 @@ class Ui_NewApp(object):
             encrypted=salt+encrypted
             encrypted=encrypted 
 
-            cur.execute("INSERT INTO passwords (userid, site, password)VALUES (%s,%s, %s)", (self.id, self.aplicacionInput.text(), encrypted))
+            cur.execute( """SELECT site from passwords where userid=%s and site=%s""",(self.id,self.aplicacionInput.text()))
+            siteName=cur.fetchall()
+            if (len(siteName)==0):
+                cur.execute("INSERT INTO passwords (userid, site, password)VALUES (%s,%s, %s)", (self.id, self.aplicacionInput.text(), encrypted))
+            else: 
+                cur.execute("UPDATE passwords set password=%s where site=%s and userid=%s", ( encrypted, self.aplicacionInput.text(), self.id))
+            
+
             conexion.commit()
             blank=QMessageBox()
             blank.setIcon(QMessageBox.Information)

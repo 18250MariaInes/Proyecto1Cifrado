@@ -153,7 +153,7 @@ class Ui_SignInWidget(object):
                     invalid=QMessageBox()
                     invalid.setIcon(QMessageBox.Information)
                     invalid.setWindowTitle("INVALIDO")
-                    invalid.setText("Contraseña incorrectos")
+                    invalid.setText("Algo salió mal, datos incorrectos")
                     print("No entró")
                     invalid.exec()
             else:
