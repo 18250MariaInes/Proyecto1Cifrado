@@ -20,6 +20,7 @@ import hashlib
 from Crypto.Cipher import AES
 
 from Crypto.Hash import HMAC, SHA256
+from main import *
 
 class Ui_trustedData(object):
     def __init__(self,id, password):
@@ -121,7 +122,7 @@ class Ui_trustedData(object):
         if resultado == True:
             #puede consultar
             self.window = QtWidgets.QWidget()
-            self.ui = Ui_Buscador(self.id, self.passwordUser)
+            self.ui = Ui_Main(self.id, self.passwordUser)
             self.ui.setupUi(self.window)
             trustedData.hide()
             self.window.show()

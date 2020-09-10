@@ -7,7 +7,6 @@
 # WARNING! All changes made in this file will be lost!
 
 
-
 from config import config
 from configmain import configmain
 import hashlib
@@ -28,6 +27,8 @@ from SignIn import *
 import psycopg2
 from config import config
 from main import *
+
+from trusted import *
 
 
 class Ui_SignInWidget(object):
@@ -106,13 +107,19 @@ class Ui_SignInWidget(object):
         try:
             params = configmain()
 
+            params2=config()
+
             #print(params)
             # Conexion al servidor de PostgreSQL
             #print('Conectando a la base de datos PostgreSQL...')
             conexion = psycopg2.connect(**params)
 
+            conexion2 = psycopg2.connect(**params2)
+
             # creación del cursor
             cur = conexion.cursor()
+
+            cur2 = conexion2.cursor()
 
             # Ejecución la consulta para obtener la conexión
             print('La version de PostgreSQL es la:')
@@ -139,16 +146,30 @@ class Ui_SignInWidget(object):
                     invalid.exec()"""
                 
                 if confirmation:
+
                     print ("entró")
                     cur.execute("SELECT id FROM users WHERE email=%s", (self.userInput.text(),))
                     idUsuario=cur.fetchall()
-                    self.window = QtWidgets.QWidget()
-                    self.id=idUsuario[0][0]
-                    print(self.id, password)
-                    self.ui = Ui_Main(self.id, password)
-                    self.ui.setupUi(self.window)
-                    SignInWidget.hide()
-                    self.window.show()
+                    cur2.execute("SELECT password FROM passwords WHERE userid=%s", (idUsuario[0][0],))
+                    passwordsList=cur2.fetchall()
+                    print(passwordsList)
+                    if (len(passwordsList)==0):
+                        self.window = QtWidgets.QWidget()
+                        self.id=idUsuario[0][0]
+                        #print(self.id, password)
+                        self.ui = Ui_Main(self.id, password)
+                        self.ui.setupUi(self.window)
+                        SignInWidget.hide()
+                        self.window.show()
+                    else:
+                        self.window = QtWidgets.QWidget()
+                        self.id=idUsuario[0][0]
+                        #print(self.id, password)
+                        self.ui = Ui_trustedData(self.id, password)
+                        self.ui.setupUi(self.window)
+                        SignInWidget.hide()
+                        self.window.show()
+
                 else: 
                     invalid=QMessageBox()
                     invalid.setIcon(QMessageBox.Information)
@@ -156,18 +177,25 @@ class Ui_SignInWidget(object):
                     invalid.setText("Algo salió mal, datos incorrectos")
                     print("No entró")
                     invalid.exec()
+
+
             else:
                 blank=QMessageBox()
                 blank.setIcon(QMessageBox.Information)
                 blank.setWindowTitle("INCOMPLETO")
                 blank.setText("Por favor llene los campos")
                 blank.exec()
+        
+            cur.close()
+            cur2.close()
 
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
             if conexion is not None:
                 conexion.close()
+            if conexion2 is not None:
+                conexion2.close()
 
 
     def openSignIn(self, SignInWidget):

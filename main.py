@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from crearApp import *
 from removePage import *
 from buscador import *
-from trusted import *
+#from trusted import *
 import sys
 from keychain import *
 
@@ -74,7 +74,7 @@ class Ui_Main(object):
 
     def goConsulta(self, Form):
         self.window = QtWidgets.QWidget()
-        self.ui = Ui_trustedData(self.id, self.password)
+        self.ui = Ui_Buscador(self.id, self.password)
         self.ui.setupUi(self.window)
         self.window.show()
 

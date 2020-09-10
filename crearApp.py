@@ -22,6 +22,7 @@ from PyQt5.QtWidgets import QMessageBox
 #from Actions import Ui_bienvenidaLabel
 #from SignIn import Ui_LogIn
 from SignIn import *
+
 import psycopg2
 from config import config
 
@@ -137,6 +138,7 @@ class Ui_NewApp(object):
 
             encrypted=salt+encrypted
             encrypted=encrypted 
+            print(encrypted)
 
             cur.execute( """SELECT site from passwords where userid=%s and site=%s""",(self.id,self.aplicacionInput.text()))
             siteName=cur.fetchall()
