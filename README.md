@@ -35,7 +35,15 @@ $ python logIn.py
 ```
 
 ### Demo
-[Video](https://www.youtube.com/watch?v=AtSPUK2T4lk&feature=youtu.be)
+
+Video de demostracion
+
+[Video](https://youtu.be/AtSPUK2T4lk)
+
+Aclaracion de inicio de sesion
+
+[Video](https://youtu.be/WQH-GRfzzSo)
+
 
 ## Team
 
