@@ -35,7 +35,7 @@ $ python logIn.py
 ```
 
 ### Demo
-[Video](https://youtu.be/mZpPWhRCvYM)
+[Video](https://www.youtube.com/watch?v=AtSPUK2T4lk&feature=youtu.be)
 
 ## Team
 
