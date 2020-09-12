@@ -38,11 +38,7 @@ $ python logIn.py
 
 Video de demostracion
 
-[Video](https://youtu.be/AtSPUK2T4lk)
-
-Aclaracion de inicio de sesion
-
-[Video](https://youtu.be/WQH-GRfzzSo)
+[Video](https://youtu.be/0q6omCgKWMM)
 
 
 ## Team
